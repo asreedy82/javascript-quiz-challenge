@@ -1,0 +1,42 @@
+body {
+    background-color: #e2efee;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+h1 {
+    text-align: center;
+    color: darkgreen;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+.startButton {
+    border: none;
+    background-color: rgb(28, 195, 117);
+    border-radius: 5px;
+    color: white;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+}
+
+#questionContainer {
+    border: 3px solid black;
+}
+
+#answerContainer {
+    border: 3px solid black;
+}
