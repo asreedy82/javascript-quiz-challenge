@@ -33,10 +33,3 @@ main {
     cursor: pointer;
 }
 
-#questionContainer {
-    border: 3px solid black;
-}
-
-#answerContainer {
-    border: 3px solid black;
-}
