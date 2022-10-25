@@ -14,7 +14,7 @@ N/A
 
 Upon loading the page, there is a button to start the quiz. This kicks off the 30 second timer, which can be seen in the top right of the screen. Then the first question loads. Make your selection and continue through each question until you finish them all or time has run out. Every question answered incorretly deducts 5s from the timer. Upon completion, enter your initials to save your score.
 
-![Screen shot of main section of website](assets/images/javascript-quiz-challenge-ss.png)
+![Screen shot of main section of website](assets/images/javascript-quiz-challenge-ss1.png)
 
 ## Credits
 
