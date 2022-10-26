@@ -186,6 +186,7 @@ scoreSubmit.addEventListener("click", function (event) {
         //save updated finalScores
         saveNewScore(finalScores);
         displayAllScores();
+        scoreSubmit.remove();
     }
 
 
@@ -224,6 +225,7 @@ clearScores.addEventListener("click", function(event) {
     if (element.matches("button") === true) {
         var clearScore = [];
         saveNewScore(clearScore);
+        scoreOrderedList.remove();
     }
 })
 
