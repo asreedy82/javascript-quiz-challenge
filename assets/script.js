@@ -143,13 +143,15 @@ var initialsInput = document.createElement("input");
 var scoreContainer = document.createElement("div");
 var scoreSubmit = document.createElement("button");
 var highScoreHeader = document.createElement("h2");
+var scoreOrderedList = document.createElement("ol");
+var clearScores = document.createElement("button");
 var finalScores = [];
 
 //function to get saved scores
 function getSavedScores() {
     var savedScores = JSON.parse(localStorage.getItem("finalScores"));
     if (savedScores !== null) {
-        finalScores = [savedScores];
+        finalScores = savedScores;
     }
 }
 
@@ -162,7 +164,7 @@ function submitScore() {
     initialsContainer.innerHTML = "Enter your initials here: ";
     scoreContainer.textContent = "Your score: " + scoreTracker;
     mainSection.appendChild(scoreSubmit);
-    scoreSubmit.setAttribute("style", "background-color: blue; color: white; border-radius: 8px; text-align: center; cursor: pointer; padding: 8px; line-height: 8px; mad-width: 350px");
+    scoreSubmit.setAttribute("style", "background-color: blue; margin: 8px; color: white; border-radius: 8px; text-align: center; cursor: pointer; padding: 8px; line-height: 8px; mad-width: 350px");
     scoreSubmit.innerHTML = "Submit";
 }
 
@@ -174,8 +176,8 @@ scoreSubmit.addEventListener("click", function (event) {
     if (initials === "") {
         alert("Initials cannot be blank");
     } else {
-        var newScore = [initials + ": " +
-            scoreTracker];
+        var newScore = initials + ": " +
+            scoreTracker;
         //print current finalScores
         console.log(newScore);
         //add new score to saved scores
@@ -198,19 +200,32 @@ function saveNewScore(userScore) {
 function displayAllScores() {
     var scoresToDisplay = JSON.parse(localStorage.getItem("finalScores"));
     mainSection.appendChild(highScoreHeader);
+    mainSection.appendChild(scoreOrderedList)
     highScoreHeader.textContent = "High Scores";
     for (var i = 0; i < finalScores.length; i++) {
         var finalScore = finalScores[i];
-        var highScore = document.createElement("div");
+        var highScore = document.createElement("li");
         highScore.textContent = finalScore;
-        mainSection.appendChild(highScore);
-
+        scoreOrderedList.appendChild(highScore);
     }
+    mainSection.appendChild(clearScores);
+    clearScores.setAttribute("style", "background-color: blue; margin: 8px; color: white; border-radius: 8px; text-align: center; cursor: pointer; padding: 8px; line-height: 8px; mad-width: 350px");
+    clearScores.innerHTML = "Reset Scores";
 }
 
 //run getSavedScores on page load
 getSavedScores();
 console.log(finalScores);
+
+//clear savedScores
+clearScores.addEventListener("click", function(event) {
+    event.preventDefault();
+    var element = event.target;
+    if (element.matches("button") === true) {
+        var clearScore = [];
+        saveNewScore(clearScore);
+    }
+})
 
 //questions, choices, and correct answers
 var questions = [
