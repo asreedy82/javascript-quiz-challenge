@@ -1,10 +1,4 @@
-//1. display welcome screen with title and message asking user if they're ready to begin with 'OK' button
-//2. once button is clicked, start timer in bottom right of Header and display first question
-//3. if question is answered correctly, display 'correct' then display next question
-//4. if question is answered incorrectly, reduce timer by 5 seconds, display 'incorrect', then move to next question
-//5. after time runs out or all questions answered, game over message
-//6. allow user to enter intitials to save score
-//7. display score and initials
+
 
 //variables
 var countdownTimer = document.getElementById("countdown");
@@ -21,13 +15,6 @@ var li4 = document.createElement("li");
 var divAnswer = document.createElement("div");
 var questionNumber = 0;
 var scoreTracker = 0;
-var initialsContainer = document.createElement("div");
-var initialsInput = document.createElement("input");
-var scoreContainer = document.createElement("div");
-var scoreSubmit = document.createElement("button");
-var initials = localStorage.getItem("initials");
-var highScoreHeader = document.createElement("h2");
-var highScore = document.createElement("div");
 
 
 //start quiz button
@@ -45,7 +32,7 @@ function countdown() {
                 countdownTimer.remove();
                 clearInterval(timeInterval);
                 mainSection.textContent = "Time is up!";
-                saveScore ();
+                submitScore();
             }
         } else {
             countdownTimer.remove();
@@ -115,7 +102,7 @@ listEl.addEventListener("click", function (event) {
                     askQuestion(questions[questionNumber], choices1[questionNumber], choices2[questionNumber], choices3[questionNumber], choices4[questionNumber], answers[questionNumber]);
                 } else {
                     mainSection.textContent = "You're done!";
-                    saveScore ();
+                    submitScore();
                 }
             }, 1000)
             //if the choice is incorrect, display "incorrect" then show next question or "you're done" if the last question
@@ -133,7 +120,7 @@ listEl.addEventListener("click", function (event) {
                     askQuestion(questions[questionNumber], choices1[questionNumber], choices2[questionNumber], choices3[questionNumber], choices4[questionNumber], answers[questionNumber]);
                 } else {
                     mainSection.textContent = "You're done!";
-                    saveScore ();
+                    submitScore();
                 }
             }, 1000)
         }
@@ -150,8 +137,24 @@ function startQuiz() {
     askQuestion(questions[questionNumber], choices1[questionNumber], choices2[questionNumber], choices3[questionNumber], choices4[questionNumber], answers[questionNumber]);
 }
 
-//function to save score and initials
-function saveScore () {
+//variables for score collection
+var initialsContainer = document.createElement("div");
+var initialsInput = document.createElement("input");
+var scoreContainer = document.createElement("div");
+var scoreSubmit = document.createElement("button");
+var highScoreHeader = document.createElement("h2");
+var finalScores = [];
+
+//function to get saved scores
+function getSavedScores() {
+    var savedScores = JSON.parse(localStorage.getItem("finalScores"));
+    if (savedScores !== null) {
+        finalScores = [savedScores];
+    }
+}
+
+//function to submit recent score
+function submitScore() {
     mainSection.appendChild(initialsContainer);
     mainSection.appendChild(initialsInput);
     mainSection.appendChild(scoreContainer);
@@ -161,78 +164,99 @@ function saveScore () {
     mainSection.appendChild(scoreSubmit);
     scoreSubmit.setAttribute("style", "background-color: blue; color: white; border-radius: 8px; text-align: center; cursor: pointer; padding: 8px; line-height: 8px; mad-width: 350px");
     scoreSubmit.innerHTML = "Submit";
-    scoreSubmit.addEventListener("click", function (event) {
-        event.preventDefault();
-        var userScore = {
-            initials: initialsInput.value,
-            scoreTracker
-        };
-        if (initials === "") {
-            alert("Initials cannot be blank");
-        } else {
-            localStorage.setItem("userScore", JSON.stringify(userScore));
-            setTimeout (function () {
-                showScores();
-            }, 500);
-        }
-    })
 }
 
-var totalScores = [];
-var totalInitials = [];
+//collect initials off click
+scoreSubmit.addEventListener("click", function (event) {
+    event.preventDefault();
+    var initials = initialsInput.value
 
-//funtion to display score and initials
-function showScores() {
-    var showUserScore = JSON.parse(localStorage.getItem("userScore"));
+    if (initials === "") {
+        alert("Initials cannot be blank");
+    } else {
+        var newScore = [initials + ": " +
+            scoreTracker];
+        //print current finalScores
+        console.log(newScore);
+        //add new score to saved scores
+        finalScores.push(newScore); 
+        console.log("pushed finalscores " + finalScores)
+        //save updated finalScores
+        saveNewScore(finalScores);
+        displayAllScores();
+    }
+
+
+})
+
+//save recent scores
+function saveNewScore(userScore) {
+    localStorage.setItem("finalScores", JSON.stringify(userScore))
+}
+
+//display all scores
+function displayAllScores() {
+    var scoresToDisplay = JSON.parse(localStorage.getItem("finalScores"));
     mainSection.appendChild(highScoreHeader);
-    mainSection.appendChild(highScore);
     highScoreHeader.textContent = "High Scores";
-    highScore.textContent = showUserScore.initials + ": " + showUserScore.scoreTracker;
+    for (var i = 0; i < finalScores.length; i++) {
+        var finalScore = finalScores[i];
+        var highScore = document.createElement("div");
+        highScore.textContent = finalScore;
+        mainSection.appendChild(highScore);
+
+    }
 }
+
+//run getSavedScores on page load
+getSavedScores();
+console.log(finalScores);
 
 //questions, choices, and correct answers
 var questions = [
-    'Which of these characters immediately follows a function?', 
-    'Which of these keywords allows you to declare a variable?', 
-    'Which of these is proper syntax for an array?', 
+    'Which of these characters immediately follows a function?',
+    'Which of these keywords allows you to declare a variable?',
+    'Which of these is proper syntax for an array?',
     'How many times will this for loop execute? for (var i = 0; i < 7; i++)',
     'document.querySelector(".div") will return which these?'
-    ];
+];
 var choices1 = [
-    '( )', 
-    'let', 
-    '"this", "is", "an, "array"', 
+    '( )',
+    'let',
+    '"this", "is", "an, "array"',
     '7',
     'all div elements in the HTML'
-    ];
+];
 var choices2 = [
-    '[ ]', 
-    'var', 
-    '("this", "is", "an", "array")', 
+    '[ ]',
+    'var',
+    '("this", "is", "an", "array")',
     '6',
     'the first div element in the HTML'
-    ];
+];
 var choices3 = [
-    '< >', 
-    'const', 
-    '["this", "is", "an", "array"]', 
+    '< >',
+    'const',
+    '["this", "is", "an", "array"]',
     '8',
     'the first id selector with id = div'
-    ];
+];
 var choices4 = [
-    '??', 
-    'All of the above', 
-    'this, is, an, array', 
+    '??',
+    'All of the above',
+    'this, is, an, array',
     '1',
     'the first class selector with class = div'
-    ];
+];
 var answers = [
-    '1', 
-    '4', 
-    '3', 
+    '1',
+    '4',
+    '3',
     '2',
     '4'
-    ];
+];
+
+
 
 
 
