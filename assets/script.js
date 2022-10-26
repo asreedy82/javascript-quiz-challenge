@@ -146,6 +146,7 @@ listEl.addEventListener("click", function (event) {
 function startQuiz() {
     countdown();
     document.getElementById("startQuiz").remove();
+    document.getElementById("instructions").remove();
     askQuestion(questions[questionNumber], choices1[questionNumber], choices2[questionNumber], choices3[questionNumber], choices4[questionNumber], answers[questionNumber]);
 }
 
@@ -232,7 +233,6 @@ var answers = [
     '2',
     '4'
     ];
-
 
 
 
